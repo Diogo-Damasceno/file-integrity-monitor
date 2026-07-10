@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "file-integrity-monitor"
+version = "0.1.0"
+description = "Monitor de integridade de arquivos baseado em hashes SHA-256 (ferramenta defensiva)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Diogo Damasceno", email = "mitszukyo@gmail.com" },
+]
+keywords = ["security", "integrity", "forensics", "defensive"]
+
+[project.scripts]
+fim = "fim.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
