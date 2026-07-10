@@ -7,7 +7,14 @@ import json
 import sys
 from pathlib import Path
 
-from fim.core import build_baseline, compare
+from fim.core import (
+    KIND_ADDED,
+    KIND_MODIFIED,
+    KIND_REMOVED,
+    build_baseline,
+    collect_files,
+    compare,
+)
 
 BASELINE_FILE = ".fim-baseline.json"
 
@@ -36,11 +43,11 @@ def cmd_check(args: argparse.Namespace) -> int:
     paths = args.paths or list(baseline.keys())
     current = build_baseline(paths)
     diff = compare(baseline, current)
-    total = len(diff["modified"]) + len(diff["added"]) + len(diff["removed"])
+    total = len(diff[KIND_MODIFIED]) + len(diff[KIND_ADDED]) + len(diff[KIND_REMOVED])
     if total == 0:
         print("OK: nenhuma alteracao detectada.")
         return 0
-    for kind in ("modified", "added", "removed"):
+    for kind in (KIND_MODIFIED, KIND_ADDED, KIND_REMOVED):
         for item in diff[kind]:
             print(f"[{kind.upper()}] {item}")
     return 1
