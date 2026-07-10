@@ -26,7 +26,7 @@ def cmd_init(args: argparse.Namespace) -> int:
     baseline = build_baseline(args.paths)
     target = Path(args.output)
     _save_baseline(target, baseline)
-    print(f"Baseline criado com {len(baseline)} arquivo(s) em {target}")
+    print(f"Baseline criado com {len(baseline)} arquivo(s) em {target}", file=sys.stderr)
     return 0
 
 
