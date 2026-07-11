@@ -1,64 +1,51 @@
-# file-integrity-monitor (FIM)
+# file-integrity-monitor
 
 Ferramenta defensiva de linha de comando que monitora a integridade de
-arquivos por meio de hashes SHA-256. Ela cria um **baseline** de hashes e,
-posteriormente, detecta modificações, criações e remoções comparando o
-estado atual com esse baseline.
+arquivos por meio de hashes SHA-256. Cria um **baseline** e, depois, detecta
+modificações, criações e remoções comparando o estado atual com o baseline.
 
-## ⚠️ Aviso ético
-
-Esta é uma ferramenta **defensiva e educacional**. Ela serve para detectar
-alterações em sistemas **de sua propriedade ou nos quais você tenha
-autorização explícita** para monitorar. Não a utilize para inspecionar
-arquivos de terceiros sem permissão. O autor não se responsabiliza por uso
-inadequado.
-
-## Requisitos
-
-- Python 3.10+
-- Apenas biblioteca padrão (sem dependências externas).
+> ⚠️ Ferramenta **defensiva e educacional**. Detecta alterações em arquivos **seus**.
 
 ## Instalação
 
+Pré-requisitos: **Python 3.10+**.
+
 ```bash
+git clone https://github.com/Diogo-Damasceno/file-integrity-monitor.git
+cd file-integrity-monitor
+python3 -m venv .venv
+. .venv/bin/activate
 pip install -e .
 ```
 
+Após instalar, o comando do projeto fica disponível dentro do venv.
+Para usar fora dele, crie um atalho:
+
+```bash
+mkdir -p ~/.local/bin
+ln -sf "$(pwd)/.venv/bin/fim" ~/.local/bin/fim
+```
+
+> Dica: se `~/.local/bin` não estiver no teu `PATH`, rode
+> `export PATH="$HOME/.local/bin:$PATH"` (e adicione ao `~/.bashrc`/`~/.zshrc`).
+
+
 ## Uso
 
-Criar um baseline de arquivos/diretórios:
-
 ```bash
-fim init /etc /home/voce/documentos
-```
+# 1) cria o baseline de arquivos/diretorios
+fim baseline /etc /home/diogo/docs
 
-O baseline é salvo em `.fim-baseline.json` (use `-o` para outro caminho).
-
-Verificar alterações (retorna código 1 se houver diferenças):
-
-```bash
+# 2) verifica se algo mudou desde o baseline
 fim check
+
+# 3) verifica caminhos especificos contra um baseline custom
+fim check /etc --baseline /opt/fim/baseline.json
 ```
 
-Mostrar diferenças em JSON:
-
-```bash
-fim diff
-```
-
-## Como funciona
-
-1. `init` percorre os caminhos informados (arquivos ou diretórios) e armazena
-   o hash SHA-256 de cada arquivo em um JSON.
-2. `check`/`diff` recalcula os hashes e os compara com o baseline,
-   classificando cada arquivo em `modified`, `added` ou `removed`.
-
-## Testes
-
-```bash
-pytest
-```
+O baseline padrão fica em `~/.local/share/fim/baseline.json` (ou o informado
+por `-o/--output`).
 
 ## Licença
 
-MIT — Copyright (c) 2026 Diogo Damasceno.
+MIT — veja `LICENSE`.
